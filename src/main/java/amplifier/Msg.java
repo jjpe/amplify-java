@@ -71,37 +71,37 @@ public class Msg {
         this.ast = null;
     }
 
-    Msg setSource(String source) {
+    public Msg setSource(String source) {
         this.source = source;
         return this;
     }
 
-    Msg setRequestNumber(long requestNumber) {
+    public Msg setRequestNumber(long requestNumber) {
         this.requestNumber = requestNumber;
         return this;
     }
 
-    Msg setOrigin(String origin) {
+    public Msg setOrigin(String origin) {
         this.origin = origin;
         return this;
     }
 
-    Msg setContents(Contents contents) {
+    public Msg setContents(Contents contents) {
         this.contents = contents;
         return this;
     }
 
-    Msg setRegions(List<Region> regions) {
+    public Msg setRegions(List<Region> regions) {
         this.regions = regions;
         return this;
     }
 
-    Msg setLanguage(Language language) {
+    public Msg setLanguage(Language language) {
         this.language = language;
         return this;
     }
 
-    Msg setAst(Ast ast) {
+    public Msg setAst(Ast ast) {
         this.ast = ast;
         return this;
     }
