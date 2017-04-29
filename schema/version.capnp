@@ -15,22 +15,14 @@ struct Version {
     # An identifier indicating the Source that sent this version
     source @0 : Text;
 
-    # A unique identifier. The Source indicated by the `source` field
-    # increments this number for each version it sends.
-    requestNumber @1 : UInt64;
-
-    # A unique identifier indicating the originator of the `contents`,
-    # for example the name of a file being edited.
-    origin @2 : Text;
+    language @1 : Common.Language;
 
     # The content of this version. Note that this can be some dirty
     # representation of the `origin` data, for example a file being
     # edited that has changes not yet written to disk.
-    contents @3 : Common.Contents;
+    contents @2 : Common.Contents;
 
     # Any selections made in the `contents`. Each selection is
     # expressed as a `Common`.`Region`.
-    selections @4 : List(Common.Region);
-
-    language @5 : Common.Language;
+    selections @3 : List(Common.Region);
 }

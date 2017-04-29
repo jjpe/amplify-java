@@ -1,7 +1,6 @@
 package amplifier;
 
 import core.Component;
-import core.cerealize.CapnpCerealizer;
 import core.cerealize.ICerealizer;
 import org.zeromq.ZMQ;
 
@@ -21,7 +20,7 @@ public class Broadcaster {
         this.cerealizer = cerealizer;
     }
 
-    public Broadcaster() {  this(new CapnpCerealizer());  }
+    public Broadcaster() {  this(new Msg.CapnpCerealizer());  }
 
     public Broadcaster receiveAddress(final String addr) {
         this.rxAddress = addr;
@@ -40,12 +39,12 @@ public class Broadcaster {
     }
 
     public void send(final Msg msg, final int flags) {
-        final byte[] bytes = this.cerealizer.cerealize(msg, Msg.class);
+        final byte[] bytes = this.cerealizer.cerealize(msg);
         this.tx.sendBytes(bytes, flags);
     }
 
     public Msg receive(final int flags) {
         final byte[] bytes = this.rx.receiveBytes(flags);
-        return this.cerealizer.decerealize(bytes, Msg.class);
+        return this.cerealizer.decerealize(bytes);
     }
 }

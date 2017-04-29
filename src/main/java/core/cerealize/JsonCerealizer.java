@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
+/** Generic JSON de/serializer based on Google GSON. */
 public class JsonCerealizer implements ICerealizer {
     private final static String ENCODING = "UTF-8";
 
@@ -19,7 +20,7 @@ public class JsonCerealizer implements ICerealizer {
     }
 
     @Override
-    public <T> byte[] cerealize(final T msg, final Class<T> _) {
+    public <T> byte[] cerealize(final T msg) {
         try {
             final String json = gson.toJson(msg, new TypeToken<Collection<T>>(){}.getType());
             return json.getBytes(ENCODING);
@@ -29,7 +30,7 @@ public class JsonCerealizer implements ICerealizer {
     }
 
     @Override
-    public <T> T decerealize(final byte[] bytes, final Class<T> _) {
+    public <T> T decerealize(final byte[] bytes) {
         try {
             final String json = new String(bytes, ENCODING);
             return gson.fromJson(json, new TypeToken<Collection<T>>(){}.getType());

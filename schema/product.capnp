@@ -13,24 +13,20 @@ using Common = import "./common.capnp";
 #  4. received by one or more `Sink`s
 struct Product {
     # An identifier indicating the Server that sent this product
-    server @0 : Text;
-
-    # A unique identifier. The Server indicated by the `server` field
-    # increments this number for each product it sends.
-    requestNumber @1 : UInt64;
+    source @0 : Text;
 
     # A unique identifier indicating the originator of the `contents`,
     # for example the name of a file being edited. This is typically the
     # same value as the `Version` that caused the server response.
-    origin @2 : Text;
+    product @1 : Text;
+
+    # The language of a product. Useful for some products, e.g. ASTs.
+    # However this is not a useful field for all languages so the field
+    # can be set to a `none` variant.
+    language @2 : Common.Language;
 
     # The content of this version. Note that this can be some dirty
     # representation of the `origin` data, for example a file being
     # edited that has changes not yet written to disk.
     contents @3 : Common.Contents;
-
-    # The language of a product. Useful for some products, e.g. ASTs.
-    # However this is not a useful field for all languages so the field
-    # can be set to a `none` variant.
-    language @4 : Common.Language;
 }

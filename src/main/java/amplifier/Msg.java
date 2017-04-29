@@ -1,13 +1,19 @@
 package amplifier;
 
-import core.Ast;
-import core.Contents;
-import core.Language;
-import core.Region;
+import core.*;
+import core.cerealize.ICerealizer;
+import org.capnproto.*;
+import org.capnproto.examples.CommonOuter;
+import org.capnproto.examples.MsgOuter;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Msg {
+    private ICerealizer cerealizer = new Msg.CapnpCerealizer();
+
     /**
      * An identifier indicating the Source that sent this version.
      *
@@ -124,4 +130,128 @@ public class Msg {
     public Language getLanguage() { return this.language; }
 
     public Ast getAst() { return this.ast; }
+
+
+    public void setCerealizer(ICerealizer cerealizer) {
+        this.cerealizer = cerealizer;
+    }
+
+    public ICerealizer getCerealizer() { return this.cerealizer; }
+
+    static class CapnpCerealizer implements ICerealizer {
+        @Override
+        public <T> byte[] cerealize(T msg) {
+            final MessageBuilder messageBuilder = new MessageBuilder();
+
+            // TODO:
+            return new byte[0];
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public <T> T decerealize(byte[] bytes) {
+            try {
+                final BufferedInputStream bis = new ArrayInputStream(ByteBuffer.wrap(bytes));
+                final MessageReader messageReader = SerializePacked.read(bis);
+                final MsgOuter.Msg.Reader msgReader = messageReader.getRoot(MsgOuter.Msg.factory);
+                return (T) new Msg(decerealizeSource(msgReader))
+                        .setRequestNumber(msgReader.getRequestNumber())
+                        .setOrigin(decerealizeOrigin(msgReader))
+                        .setContents(decerealizeContents(msgReader))
+                        .setRegions(decerealizeRegions(msgReader))
+                        .setLanguage(decerealizeLanguage(msgReader))
+                        .setAst(decerealizeAst(msgReader));
+            } catch (IOException ioe) {
+                throw new RuntimeException("SerializePacked read failed", ioe);
+            }
+        }
+
+        private static String decerealizeSource(final MsgOuter.Msg.Reader msgReader) {
+            final Text.Reader sourceReader = msgReader.getSource();
+            return sourceReader.toString();
+        }
+
+        private static String decerealizeOrigin(final MsgOuter.Msg.Reader msgReader) {
+            final CommonOuter.Option.Reader<Text.Reader> optionReader = msgReader.getOrigin();
+            switch(optionReader.which()) {
+                case NONE: break;
+                case SOME:
+                    final Text.Reader originReader = optionReader.getSome();
+                    return originReader.toString();
+                case _NOT_IN_SCHEMA:
+                    throw new NotImplementedException("Not in schema");
+            }
+            return null;
+        }
+
+        private static core.Contents decerealizeContents(final MsgOuter.Msg.Reader msgReader) {
+            final CommonOuter.Option.Reader<CommonOuter.Contents.Reader> optionReader = msgReader.getContents();
+            switch(optionReader.which()) {
+                case NONE: break;
+                case SOME:
+                    final CommonOuter.Contents.Reader contentsReader = optionReader.getSome();
+                    switch(contentsReader.which()) {
+                        case TEXT:
+                            final String text = contentsReader.getText().toString();
+                            return new core.Contents(text);
+                        case ENTRIES:
+                            final List<String> entries = new ArrayList<>();
+                            for (final Text.Reader entry : contentsReader.getEntries()) {
+                                entries.add(entry.toString());
+                            }
+                            return new core.Contents(entries);
+                        case _NOT_IN_SCHEMA:
+                            throw new NotImplementedException("Not in schema");
+                    }
+                case _NOT_IN_SCHEMA:
+                    throw new NotImplementedException("Not in schema");
+            }
+            return null;
+        }
+
+        private static List<core.Region> decerealizeRegions(final MsgOuter.Msg.Reader msgReader) {
+            final List<core.Region> regions = new ArrayList<>();
+            for (final CommonOuter.Region.Reader r : msgReader.getRegions()) {
+                regions.add(new core.Region(r.getBegin(), r.getEnd()));
+            }
+            return regions;
+        }
+
+        private static core.Language decerealizeLanguage(final MsgOuter.Msg.Reader msgReader) {
+            final CommonOuter.Option.Reader<CommonOuter.Language.Reader> optionReader = msgReader.getLanguage();
+            switch(optionReader.which()) {
+                case NONE: break;
+                case SOME:
+                    final CommonOuter.Language.Reader languageReader = optionReader.getSome();
+                    return new core.Language(languageReader.getRaw().toString());
+                case _NOT_IN_SCHEMA:
+                    throw new NotImplementedException("Not in schema");
+            }
+            return null;
+        }
+
+        private static core.Ast decerealizeAst(final MsgOuter.Msg.Reader msgReader) {
+            final CommonOuter.Option.Reader<CommonOuter.Ast.Reader> optionReader = msgReader.getAst();
+            switch(optionReader.which()) {
+                case NONE: break;
+                case SOME:
+                    final CommonOuter.Ast.Reader astReader = optionReader.getSome();
+                    return decerealizeAstNode(astReader);
+                case _NOT_IN_SCHEMA:
+                    throw new NotImplementedException("Not in schema");
+            }
+            return null;
+        }
+
+        private static core.Ast decerealizeAstNode(final CommonOuter.Ast.Reader astReader) {
+            final String name = astReader.getName().toString();
+            final String data = astReader.hasData()  ?  astReader.getData().toString()  :  "";
+            core.Ast ast = new core.Ast(name).addData(data);
+            for (final CommonOuter.Ast.Reader childReader : astReader.getChildren()) {
+                final core.Ast child = decerealizeAstNode(childReader);
+                ast = ast.addChildren(child);
+            }
+            return ast;
+        }
+    }
 }
