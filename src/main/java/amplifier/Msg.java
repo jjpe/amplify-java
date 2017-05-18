@@ -3,11 +3,13 @@ package amplifier;
 import core.*;
 import core.cerealize.ICerealizer;
 import org.capnproto.*;
+import org.capnproto.Void;
 import org.capnproto.examples.CommonOuter;
 import org.capnproto.examples.MsgOuter;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +74,7 @@ public class Msg {
         this.requestNumber = 0;
         this.origin = null;
         this.contents = null;
-        this.regions = null;
+        this.regions = new ArrayList<>();
         this.language = null;
         this.ast = null;
     }
@@ -139,13 +141,139 @@ public class Msg {
     public ICerealizer getCerealizer() { return this.cerealizer; }
 
     static class CapnpCerealizer implements ICerealizer {
+        private static final int MB = 1024 * 1014;
+        private final byte[] CEREALIZE_BUFFER = new byte[64 * MB]; // TODO: get rid of the buffer.
+
+        public CapnpCerealizer() {
+            super();
+        }
+
         @Override
         public <T> byte[] cerealize(T msg) {
             final MessageBuilder messageBuilder = new MessageBuilder();
+            final MsgOuter.Msg.Builder msgBuilder = messageBuilder.initRoot(MsgOuter.Msg.factory);
+            final Msg m = (Msg) msg;
+            msgBuilder.setSource(m.getSource());
+            msgBuilder.setRequestNumber(m.getRequestNumber());
+            cerealizeOrigin(m.getOrigin(), msgBuilder);
+            cerealizeContents(m.getContents(), msgBuilder);
+            cerealizeRegions(m.getRegions(), msgBuilder);
+            cerealizeLanguage(m.getLanguage(), msgBuilder);
+            cerealizeAst(m.getAst(), msgBuilder);
 
-            // TODO:
-            return new byte[0];
+            try {
+                // FIXME: this type of buffer use is rather fragile.
+                final ByteBuffer buffer = ByteBuffer.wrap(CEREALIZE_BUFFER);
+                buffer.clear();
+                final WritableByteChannel channel = new ArrayOutputStream(buffer);
+                SerializePacked.writeToUnbuffered(channel, messageBuilder);
+                return CEREALIZE_BUFFER;
+            } catch (IOException ioe) {
+                // TODO:
+                ioe.printStackTrace();
+                return null;
+            }
         }
+
+        private static void cerealizeOrigin(final String origin, final MsgOuter.Msg.Builder msgBuilder) {
+            final CommonOuter.Option.Builder<Text.Builder> optionBuilder = msgBuilder.initOrigin();
+            if (origin == null) {
+                optionBuilder.setNone(Void.VOID);
+            } else {
+                optionBuilder.setSome(Text.factory, new Text.Reader(origin));
+            }
+        }
+
+        private static void cerealizeContents(final Contents contents, final MsgOuter.Msg.Builder msgBuilder) {
+            final CommonOuter.Option.Builder<CommonOuter.Contents.Builder> optionBuilder = msgBuilder.initContents();
+            if (contents == null) {
+                optionBuilder.setNone(Void.VOID);
+                return;
+            }
+            switch (contents.which()) {
+                case Text:
+                    final CommonOuter.Contents.Builder cb = optionBuilder.initSome();
+                    cb.setText(contents.asString());
+                    break;
+                case Entries:
+                    final List<String> entries = contents.asEntries();
+                    final int entryCount = entries.size();
+
+
+                    // TODO: This case  fails
+
+                    final CommonOuter.Contents.Builder contentsBuilder = optionBuilder.initSome(100000);
+
+//                    contentsBuilder.setEntries();
+//                    new CommonOuter.Contents.factory.
+//                    final TextList.Builder builders = contentsBuilder.initEntries(2 * 1024 * 1024);
+//                    contentsBuilder.set
+
+                    final TextList.Builder entriesBuilder = contentsBuilder.initEntries(entryCount);
+                    for (int i = 0; i < entryCount; i++) {
+                        final String entry = entries.get(i);
+                        entriesBuilder.set(i, new Text.Reader(entry));
+
+//                        final CharBuffer charBuffer = entriesBuilder.get(i).asByteBuffer().asCharBuffer();
+//                        charBuffer.clear();
+//                        charBuffer.append(entry);
+
+                    }
+
+//                    TextList.Builder
+
+//                    optionBuilder.setSome(TextList.factory, entriesReader);
+                    break;
+                default:
+                    throw new NotImplementedException("Msg: Unknown Contents enum variant");
+            }
+        }
+
+        private static void cerealizeRegions(final List<Region> regions, final MsgOuter.Msg.Builder msgBuilder) {
+            final int regionCount = regions.size();
+            final StructList.Builder<CommonOuter.Region.Builder> regionsBuilder = msgBuilder.initRegions(regionCount);
+            for (int i = 0; i < regionCount; i++) {
+                final Region region = regions.get(i);
+                final CommonOuter.Region.Builder regionBuilder = regionsBuilder.get(i);
+                regionBuilder.setBegin(region.getBegin());
+                regionBuilder.setEnd(region.getEnd());
+            }
+        }
+
+        private static void cerealizeLanguage(final Language language, final MsgOuter.Msg.Builder msgBuilder) {
+            final CommonOuter.Option.Builder<CommonOuter.Language.Builder> languageOptionBuilder = msgBuilder.initLanguage();
+            if (language == null) {
+                languageOptionBuilder.setNone(Void.VOID);
+            } else {
+                final CommonOuter.Language.Builder languageBuilder = languageOptionBuilder.initSome();
+                languageBuilder.setRaw(language.getLanguage());
+            }
+
+        }
+
+        private static void cerealizeAst(final Ast ast, final MsgOuter.Msg.Builder msgBuilder) {
+            final CommonOuter.Option.Builder<CommonOuter.Ast.Builder> astOptionBuilder = msgBuilder.initAst();
+            if (ast == null) {
+                astOptionBuilder.setNone(Void.VOID);
+            } else {
+                cerealizeAstNode(ast, astOptionBuilder.initSome());
+            }
+        }
+
+        private static void cerealizeAstNode(final Ast ast, final CommonOuter.Ast.Builder astBuilder) {
+            astBuilder.setName(ast.getName());
+            final String data = ast.getData();
+            astBuilder.setData(data != null ? data : "");
+
+            final int childCount = ast.getChildren().size();
+            final StructList.Builder<CommonOuter.Ast.Builder> childrenBuilder = astBuilder.initChildren(childCount);
+            for (int i = 0; i < childCount; i++) {
+                final Ast child = ast.getChildren().get(i);
+                final CommonOuter.Ast.Builder childBuilder = childrenBuilder.get(i);
+                cerealizeAstNode(child, childBuilder);
+            }
+        }
+
 
         @SuppressWarnings("unchecked")
         @Override

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Contents {
-    private enum Which { Text, Entries }
+    public enum Which { Text, Entries }
 
     private String text;
     private List<String> entries;
@@ -21,6 +21,8 @@ public class Contents {
         this.entries = entries;
         this.which = Which.Entries;
     }
+
+    public Which which() { return this.which; }
 
     public String asString() {
         switch(this.which) {

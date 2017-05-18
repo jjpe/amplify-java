@@ -11,8 +11,8 @@ public class Ast {
 
     public Ast(String name) {
         this.name = name;
-        this.data = null;
-        this.children = null;
+        this.data = new StringBuilder();
+        this.children = new ArrayList<>();
     }
 
     public String getName() { return this.name; }

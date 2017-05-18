@@ -17,7 +17,7 @@ struct Version {
 
     language @1 : Common.Language;
 
-    # The content of this version. Note that this can be some dirty
+    # The contents of this version. Note that this can be some dirty
     # representation of the `origin` data, for example a file being
     # edited that has changes not yet written to disk.
     contents @2 : Common.Contents;

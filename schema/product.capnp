@@ -25,7 +25,7 @@ struct Product {
     # can be set to a `none` variant.
     language @2 : Common.Language;
 
-    # The content of this version. Note that this can be some dirty
+    # The contents of this version. Note that this can be some dirty
     # representation of the `origin` data, for example a file being
     # edited that has changes not yet written to disk.
     contents @3 : Common.Contents;

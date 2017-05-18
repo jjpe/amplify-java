@@ -20,13 +20,13 @@ struct Msg {
     # being edited.
     origin @2 : Option(Text);
 
-    # The content of this version. Note that this can be some dirty
+    # The contents of this version. Note that this can be some dirty
     # representation of the `origin` data, for example a file being
     # edited that has changes not yet written to disk.
     contents @3 : Option(Common.Contents);
 
-    # This refers to 0 or more regions in the `contents`.
-    regions @4 : List(Common.Region);
+    # This refers to 0 or more region in the `contents`.
+    region @4 : List(Common.Region);
 
     # The language of this message. This can be the language of the original
     # source code, or a language based on data derived from that source code.

@@ -49,10 +49,12 @@ public class Component {
         return this.socket.receiveStringUtf8(flags);
     }
 
-    public void receiveAck(final int flags) {
+    public boolean receiveAck(final int flags) {
         final String received = this.receiveUtf8String(flags);
-        if (!"ACK".equals(received)) {
+        if (!"ACK".equalsIgnoreCase(received)) {
+            System.out.println(String.format("ERROR: Expected ACK, received %s", received));
             // TODO: Handle error: got something but it's not ACK
         }
+        return "ACK".equalsIgnoreCase(received);
     }
 }
