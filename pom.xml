@@ -12,6 +12,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jna.library.path>./native</jna.library.path>
     </properties>
 
     <dependencies>
@@ -43,6 +44,12 @@
             <!--<groupId>com.google.inject.extensions</groupId>-->
             <!--<artifactId>guice-assistedinject</artifactId>-->
         <!--</dependency>-->
+
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>4.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>
