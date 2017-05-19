@@ -65,7 +65,7 @@ public class Ast implements Closeable {
     private String string(long indentLevel) {
         if (this.ptr == null) {  return "" + null;  }
 
-        StringBuilder sb = new StringBuilder()
+        final StringBuilder sb = new StringBuilder()
                 .append(repeat(indentLevel, "    "))
                 .append(this.getName())
                 .append("(");
@@ -75,10 +75,9 @@ public class Ast implements Closeable {
             if (this.hasChildren()) {
                 sb      .append("\n")
                         .append(repeat(indentLevel + 1, "    "))
-                        .append(data)
-                        .append(", ");
+                        .append("\"").append(data).append("\", ");
             } else {
-                sb.append(data);
+                sb.append("\"").append(data).append("\"");
             }
         }
 

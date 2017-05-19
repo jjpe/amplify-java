@@ -39,6 +39,10 @@ public class Demo {
                                                 new Ast("Mul")
                                                         .addChild(new Ast("Integer").setData("7"))
                                                         .addChild(new Ast("Integer").setData("5"))
+                                                        .addChild(new Ast("FnCall")
+                                                                .setData("double")
+                                                                .addChild(new Ast("Integer").setData("10"))
+                                                        )
                                         )
                         );
                 final Msg msg1 = new Msg()
@@ -48,10 +52,7 @@ public class Demo {
                         .addRegion(new Region(0, 10))
                         .addRegion(new Region(10, 20))
                         .setLanguage(new Language("JibberJabber"))
-                        .setContents(Contents.newEntries(
-                                "Ėñtrÿ 0",
-                                "Ėñtrÿ 1"
-                        ));
+                        .setContents(Contents.newEntries("Ėñtrÿ 0", "Ėñtrÿ 1"));
                 Thread.sleep(1000);  // Delay sending to allow the network to settle
                 source.send(msg0);
                 System.out.println("[source] Sent msg0");
