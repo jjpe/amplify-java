@@ -76,6 +76,7 @@ public interface LibCereal extends Library {
     Pointer ast_new(final String name);
     void ast_destroy(final Pointer ast);
 
+    String ast_get_name(final Pointer ast);
     void ast_set_data(final Pointer ast, final String data);
     String ast_get_data(final Pointer ast);
     void ast_clear_data(final Pointer ast);

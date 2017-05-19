@@ -72,7 +72,7 @@ public class Msg implements Closeable {
     }
 
     public Msg setLanguage(final Language language) {
-        LIB.msg_set_language(this.ptr, language.ptr);
+        LIB.msg_set_language(this.ptr, language == null ? null : language.ptr);
         return this;
     }
 

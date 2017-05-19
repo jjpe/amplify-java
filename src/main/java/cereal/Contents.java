@@ -1,5 +1,6 @@
 package cereal;
 
+import com.google.common.collect.Lists;
 import com.sun.jna.Pointer;
 
 import java.io.Closeable;
@@ -15,15 +16,13 @@ public class Contents implements Closeable {
     Contents(final Pointer ptr) {  this.ptr = ptr;  }
 
     public static Contents newText(final String text) {
-        final Contents contents = new Contents(LIB.contents_new_text(text));
-        LIB.contents_add_text(contents.ptr, text);
-        return contents;
+        return new Contents(LIB.contents_new_text(text));
     }
 
     public static Contents newEntries(final String... entries) {
         final Contents contents = new Contents(LIB.contents_new_entries());
         for (final String entry : entries) {
-            LIB.contents_add_entry(contents.ptr, entry);
+            contents.addEntry(entry);
         }
         return contents;
     }
@@ -57,11 +56,25 @@ public class Contents implements Closeable {
         return entries;
     }
 
+    @Override
+    public String toString() {
+        if (this.ptr == null) {  return "" + null;  }
+        if (this.isText()) {  return this.getText();  }
+        if (this.isEntries()) {
+            final StringBuilder sb = new StringBuilder();
+            final List<String> entries = this.getEntries();
+            sb.append("[\n");
+            for (int i = 0; i < entries.size(); i++) {
+                final String entry = entries.get(i);
+                sb.append("  ").append(entry);
+                if (i < entries.size() - 1) {  sb.append(",");  }
+                sb.append("\n");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
 
+        throw new RuntimeException("Contents is neither Text nor Entries");
 
-//    boolean contents_is_entries(final Pointer contents);
-//    void contents_add_entry(final Pointer contents, final String entry);
-//    String contents_get_entry(final Pointer contents, final long index);
-//    long ast_count_entries(final Pointer ast);
-
+    }
 }
