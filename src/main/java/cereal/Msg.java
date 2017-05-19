@@ -45,8 +45,10 @@ public class Msg implements Closeable {
 
     public Contents getContents() {  return new Contents(LIB.msg_get_contents(this.ptr));  }
 
-    public Msg addRegion(final Region region) {
-        LIB.msg_add_region(this.ptr, region.ptr);
+    public Msg addRegions(final Region... regions) {
+        for (final Region region : regions) {
+            LIB.msg_add_region(this.ptr, region.ptr);
+        }
         return this;
     }
 
@@ -83,7 +85,11 @@ public class Msg implements Closeable {
         return this;
     }
 
-    public Ast getAst() {  return new Ast(LIB.msg_get_ast(this.ptr));  }
+    public Ast getAst() {
+        final Pointer p = LIB.msg_get_ast(this.ptr);
+        if (p == null) { return null; }
+        return new Ast(p);
+    }
 
 
 

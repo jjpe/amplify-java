@@ -11,11 +11,8 @@ public class Demo {
         System.out.println(String.format("%s msg.regions:   %s", tag, msg.getRegions()));
         System.out.println(String.format("%s msg.language:  '%s'", tag, msg.getLanguage().getName()));
         final Ast ast = msg.getAst();
-        if (ast.ptr == null) {
-            System.out.println(String.format("%s msg.ast:       %s", tag, null));
-        } else {
-            System.out.println(String.format("%s msg.ast:       \n%s", tag, ast));
-        }
+        final String fmt = (ast == null)  ?  "%s msg.ast:       %s"  :  "%s msg.ast:       \n%s";
+        System.out.println(String.format(fmt, tag, ast));
     }
 
     public static void main(final String[] args) {
@@ -32,25 +29,20 @@ public class Demo {
                         .setLanguage(null)
                         .setContents(Contents.newText("gah blah"))
                         .setAst(
-                                new Ast("Plus")
-                                        .addChild(new Ast("Integer").setData("2"))
-                                        .addChild(new Ast("Integer").setData("3"))
-                                        .addChild(
-                                                new Ast("Mul")
-                                                        .addChild(new Ast("Integer").setData("7"))
-                                                        .addChild(new Ast("Integer").setData("5"))
-                                                        .addChild(new Ast("FnCall")
-                                                                .setData("double")
-                                                                .addChild(new Ast("Integer").setData("10"))
-                                                        )
-                                        )
+                                new Ast("Plus").addChildren(
+                                        new Ast("Integer").setData("2"),
+                                        new Ast("Integer").setData("3"),
+                                        new Ast("Mul").addChildren(
+                                                new Ast("Integer").setData("7"),
+                                                new Ast("Integer").setData("5"),
+                                                new Ast("FnCall").setData("double").addChildren(
+                                                        new Ast("Integer").setData("10"))))
                         );
                 final Msg msg1 = new Msg()
                         .setOrigin("code (msg1)")
                         .setRequestNumber(20001)
                         .setSource("Java Test Source")
-                        .addRegion(new Region(0, 10))
-                        .addRegion(new Region(10, 20))
+                        .addRegions(new Region(0, 10),  new Region(10, 20))
                         .setLanguage(new Language("JibberJabber"))
                         .setContents(Contents.newEntries("Ėñtrÿ 0", "Ėñtrÿ 1"));
                 Thread.sleep(1000);  // Delay sending to allow the network to settle

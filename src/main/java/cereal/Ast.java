@@ -33,8 +33,10 @@ public class Ast implements Closeable {
 
     public void clearData() {  LIB.ast_clear_data(this.ptr);  }
 
-    public Ast addChild(final Ast child) {
-        LIB.ast_add_child(this.ptr, child.ptr);
+    public Ast addChildren(final Ast... children) {
+        for (final Ast child : children) {
+            LIB.ast_add_child(this.ptr, child.ptr);
+        }
         return this;
     }
 
@@ -56,7 +58,7 @@ public class Ast implements Closeable {
     public boolean hasChildren() {  return this.countChildren() > 0; }
 
 
-    private StringBuilder repeat(final long times, final String string) {
+    private static StringBuilder repeat(final long times, final String string) {
         final StringBuilder sb = new StringBuilder();
         for (long i = 0; i < times; i++) {  sb.append(string);  }
         return sb;
@@ -89,11 +91,9 @@ public class Ast implements Closeable {
 
         if (this.hasChildren()) {
             sb      .append("\n")
-                    .append(repeat(indentLevel, "    "))
-                    .append(")");
-        } else {
-            sb.append(")");
+                    .append(repeat(indentLevel, "    "));
         }
+        sb.append(")");
         return sb.toString();
     }
 
