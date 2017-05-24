@@ -16,11 +16,19 @@ public interface LibCereal extends Library {
     void uclient_serialize_using_json(final Pointer client);
     void uclient_set_rx_addr(final Pointer client, final String addr);
     void uclient_set_tx_addr(final Pointer client, final String addr);
+    void uclient_set_rx_timeout(final Pointer client, final int timeout);
+    void uclient_set_tx_timeout(final Pointer client, final int timeout);
+    void uclient_set_rx_hwm(final Pointer client, final int hwm);
+    void uclient_set_tx_hwm(final Pointer client, final int hwm);
     Pointer uclient_connect(final Pointer client);
 
     /************************** CClient **************************/
     void cclient_destroy(Pointer cclient);
 
+    void cclient_set_rx_timeout(final Pointer client, final int timeout);
+    void cclient_set_tx_timeout(final Pointer client, final int timeout);
+    void cclient_set_rx_hwm(final Pointer client, final int hwm);
+    void cclient_set_tx_hwm(final Pointer client, final int hwm);
     void cclient_send(final Pointer client, final Pointer msg);
     void cclient_receive(final Pointer client, final Pointer msg);
 

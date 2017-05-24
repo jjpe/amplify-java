@@ -35,6 +35,26 @@ public class UClient implements Closeable {
         return this;
     }
 
+    public UClient setSendTimeout(final Timeout timeout) {
+        LIB.uclient_set_tx_timeout(this.ptr, timeout.millis);
+        return this;
+    }
+
+    public UClient setReceiveTimeout(final Timeout timeout) {
+        LIB.uclient_set_rx_timeout(this.ptr, timeout.millis);
+        return this;
+    }
+
+    public UClient setSendHwm(final Hwm hwm) {
+        LIB.uclient_set_tx_hwm(this.ptr, hwm.capacity);
+        return this;
+    }
+
+    public UClient setReceiveHwm(final Hwm hwm) {
+        LIB.uclient_set_rx_hwm(this.ptr, hwm.capacity);
+        return this;
+    }
+
     public CClient connect() {
         return new CClient(LIB.uclient_connect(this.ptr));
     }
