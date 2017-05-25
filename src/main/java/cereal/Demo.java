@@ -4,8 +4,9 @@ import java.util.Properties;
 
 public class Demo {
     private static void printMsg(final String tag, final Msg msg) {
-        System.out.println(String.format("%s msg.source:    '%s'", tag, msg.getSource()));
+        System.out.println(String.format("%s msg.process:   '%s'", tag, msg.getProcess()));
         System.out.println(String.format("%s msg.reqno:     %s", tag, msg.getRequestNumber()));
+        System.out.println(String.format("%s msg.kind:      '%s'", tag, msg.getKind()));
         System.out.println(String.format("%s msg.origin:    '%s'", tag, msg.getOrigin()));
         System.out.println(String.format("%s msg.contents:  '%s'", tag, msg.getContents()));
         System.out.println(String.format("%s msg.regions:   %s", tag, msg.getRegions()));
@@ -24,10 +25,13 @@ public class Demo {
                 final CClient source = new UClient().connect();
                 final Msg msg0 = new Msg()
                         .setOrigin("code (msg0)")
+                        .setProcess("Java Test Source")
                         .setRequestNumber(20000)
-                        .setSource("Java Test Source")
+                        .setKind("test msg")
                         .setLanguage(null)
+                        .setLanguage(new Language("FlibberClabber"))
                         .setContents(Contents.newText("gah blah"))
+                        .addRegions(new Region(0, 10),  new Region(10, 20))
                         .setAst(
                                 new Ast("Plus").addChildren(
                                         new Ast("Integer").setData("2"),
@@ -40,20 +44,25 @@ public class Demo {
                         );
                 final Msg msg1 = new Msg()
                         .setOrigin("code (msg1)")
+                        .setProcess("Java Test Source")
                         .setRequestNumber(20001)
-                        .setSource("Java Test Source")
-                        .addRegions(new Region(0, 10),  new Region(10, 20))
+                        .setKind("test msg")
                         .setLanguage(new Language("JibberJabber"))
                         .setContents(Contents.newEntries("Ėñtrÿ 0", "Ėñtrÿ 1"));
-                Thread.sleep(1000);  // Delay sending to allow the network to settle
-                source.send(msg0);
-                System.out.println("[source] Sent msg0");
-                source.send(msg1);
-                System.out.println("[source] Sent msg1");
+                while (true) {
+                    Thread.sleep(10000);  // Delay sending to allow the network to settle
+                    source.send(msg0.setRequestNumber(msg0.getRequestNumber() + 1));
+                    System.out.println(String.format("[source] Sent msg0[%s]", msg0.getRequestNumber()));
+
+                }
+//                source.send(msg1);
+//                System.out.println("[source] Sent msg1");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        })
+                .start()
+        ;
 
         new Thread(() -> { // Sink
             final Msg msg = new Msg();
@@ -66,7 +75,9 @@ public class Demo {
             sink.receive(msg);
             System.out.println("\n[sink] received msg");
             printMsg("[sink]", msg);
-        }).start();
+        })
+//                .start()
+        ;
 
 
 //        final UClient client = new UClient("test client")
