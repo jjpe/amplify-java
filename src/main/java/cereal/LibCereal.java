@@ -8,7 +8,6 @@ public interface LibCereal extends Library {
     String DYLIB_NAME = "libcereal_c_api";
     LibCereal INSTANCE = Native.loadLibrary(DYLIB_NAME, LibCereal.class);
 
-
     /************************** UReporter **************************/
     Pointer ureporter_new();
     void ureporter_destroy(Pointer ureporter);
@@ -71,10 +70,12 @@ public interface LibCereal extends Library {
     Pointer msg_new();
     void msg_destroy(Pointer msg);
 
-    void msg_set_source(final Pointer msg, final String source);
-    String msg_get_source(final Pointer msg);
+    void msg_set_process(final Pointer msg, final String source);
+    String msg_get_process(final Pointer msg);
     void msg_set_request_number(final Pointer msg, long reqno);
     long msg_get_request_number(final Pointer msg);
+    void msg_set_kind(final Pointer msg, final String source);
+    String msg_get_kind(final Pointer msg);
     void msg_set_origin(final Pointer msg, final String origin);
     String msg_get_origin(final Pointer msg);
     void msg_set_contents(final Pointer msg, final Pointer contents);

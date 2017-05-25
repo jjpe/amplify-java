@@ -17,12 +17,12 @@ public class Msg implements Closeable {
 
     public Msg() {  this.ptr = LIB.msg_new();  }
 
-    public Msg setSource(final String source) {
-        LIB.msg_set_source(this.ptr, source);
+    public Msg setProcess(final String process) {
+        LIB.msg_set_process(this.ptr, process);
         return this;
     }
 
-    public String getSource() {  return LIB.msg_get_source(this.ptr);  }
+    public String getProcess() {  return LIB.msg_get_process(this.ptr);  }
 
     public Msg setRequestNumber(long requestNumber) {
         LIB.msg_set_request_number(this.ptr, requestNumber);
@@ -30,6 +30,13 @@ public class Msg implements Closeable {
     }
 
     public long getRequestNumber() {  return LIB.msg_get_request_number(this.ptr);  }
+
+    public Msg setKind(final String kind) {
+        LIB.msg_set_kind(this.ptr, kind);
+        return this;
+    }
+
+    public String getKind() {  return LIB.msg_get_kind(this.ptr);  }
 
     public Msg setOrigin(final String origin) {
         LIB.msg_set_origin(this.ptr, origin);
