@@ -8,6 +8,41 @@ public interface LibCereal extends Library {
     String DYLIB_NAME = "libcereal_c_api";
     LibCereal INSTANCE = Native.loadLibrary(DYLIB_NAME, LibCereal.class);
 
+
+    /************************** UReporter **************************/
+    Pointer ureporter_new();
+    void ureporter_destroy(Pointer ureporter);
+
+    void ureporter_serialize_using_capn_proto(final Pointer ureporter);
+    void ureporter_serialize_using_json(final Pointer ureporter);
+    void ureporter_set_tx_addr(final Pointer ureporter, final String addr);
+    void ureporter_set_tx_timeout(final Pointer ureporter, final int timeout);
+    void ureporter_set_tx_hwm(final Pointer ureporter, final int hwm);
+    Pointer ureporter_connect(final Pointer ureporter);
+
+    /************************** CReporter **************************/
+    void creporter_destroy(Pointer creporter);
+
+    void creporter_set_tx_timeout(final Pointer creporter, final int timeout);
+    void creporter_set_tx_hwm(final Pointer creporter, final int hwm);
+    void creporter_send(final Pointer creporter, final Pointer msg);
+
+    /************************** Report **************************/
+    Pointer report_new();
+    void report_destroy(Pointer report);
+
+    void report_set_action(final Pointer report, final String action);
+    String report_get_action(final Pointer report);
+    void report_set_process(final Pointer report, final String process);
+    String report_get_process(final Pointer report);
+    void report_set_request_number(final Pointer report, long reqno);
+    long report_get_request_number(final Pointer report);
+    void report_set_duration_nanos(final Pointer report, long duration_nanos);
+    long report_get_duration_nanos(final Pointer report);
+    void report_set_command(final Pointer report, final String origin);
+    String report_get_command(final Pointer report);
+
+
     /************************** UClient **************************/
     Pointer uclient_new();
     void uclient_destroy(Pointer uclient);
