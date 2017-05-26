@@ -56,6 +56,8 @@ public class Contents implements Closeable {
         return entries;
     }
 
+    public boolean isEmpty() { return LIB.contents_is_empty(this.ptr); }
+
     @Override
     public String toString() {
         if (this.ptr == null) {  return "" + null;  }

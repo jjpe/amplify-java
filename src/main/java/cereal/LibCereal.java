@@ -94,6 +94,7 @@ public interface LibCereal extends Library {
     Pointer contents_new_entries();
     void contents_destroy(final Pointer contents);
 
+    boolean contents_is_empty(final Pointer contents);
     boolean contents_is_text(final Pointer contents);
     void contents_add_text(final Pointer contents, final String text);
     String contents_get_text(final Pointer contents);
