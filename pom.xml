@@ -53,6 +53,17 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>native</directory>
+                <includes>
+                    <include>*.so</include>
+                    <include>*.dylib</include>
+                    <include>*.dll</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <version>1.0</version>
