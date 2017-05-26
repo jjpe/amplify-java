@@ -18,7 +18,7 @@ public class Demo {
 
     public static void main(final String[] args) {
         final Properties props = System.getProperties();
-        props.setProperty("jna.library.path", "./native");
+        props.setProperty("jna.library.path", "./src/main/resources");
 
         new Thread(() -> { // Source
             try {

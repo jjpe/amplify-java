@@ -13,8 +13,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jna.library.path>./src/main/resources</jna.library.path>
-        <!--<jna.library.path>./native</jna.library.path>-->
-        <!--<jna.debug_load>true</jna.debug_load>-->
     </properties>
 
     <dependencies>
@@ -42,11 +40,6 @@
             <version>4.1.0</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>com.google.inject.extensions</groupId>-->
-            <!--<artifactId>guice-assistedinject</artifactId>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
@@ -57,12 +50,13 @@
     <build>
         <resources>
             <resource>
-                <directory>native</directory>
+                <directory>src/main/resources</directory>
                 <includes>
                     <include>*.so</include>
                     <include>*.dylib</include>
                     <include>*.dll</include>
                 </includes>
+                <targetPath>darwin</targetPath>
             </resource>
         </resources>
 
@@ -83,5 +77,23 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.4.0</version>
+                    <configuration>
+                        <!-- To get rid of the warning: [WARNING] Warning: killAfter is now
+                             deprecated. Do you need it ? Please comment on MEXEC-6. see: method
+                             execute() in https://github.com/ispringer/exec-maven-plugin/blob/master/src/main/java/org/codehaus/mojo/exec/ExecJavaMojo.java -->
+                        <killAfter>-1</killAfter>
+                        <mainClass>cereal.Demo</mainClass>
+                        <!--<mainClass>amplifier.Client</mainClass>-->
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
