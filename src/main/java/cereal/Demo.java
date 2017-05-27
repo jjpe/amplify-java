@@ -1,8 +1,11 @@
 package cereal;
 
-import java.util.Properties;
-
 public class Demo {
+    static {
+        // Ensure that the JAR generated from this code can find the dynamic lib
+        System.setProperty("jna.library.path", "./src/main/resources/");
+    }
+
     private static void printMsg(final String tag, final Msg msg) {
         System.out.println(String.format("%s msg.process:   '%s'", tag, msg.getProcess()));
         System.out.println(String.format("%s msg.reqno:     %s", tag, msg.getRequestNumber()));
@@ -17,9 +20,6 @@ public class Demo {
     }
 
     public static void main(final String[] args) {
-        final Properties props = System.getProperties();
-        props.setProperty("jna.library.path", "./src/main/resources");
-
         new Thread(() -> { // Source
             try {
                 final CClient source = new UClient().connect();
