@@ -29,12 +29,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.capnproto</groupId>
-            <artifactId>runtime</artifactId>
-            <version>0.1.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.1.0</version>
@@ -61,20 +55,6 @@
         </resources>
 
         <plugins>
-            <plugin>
-                <version>1.0</version>
-                <groupId>org.expretio.maven.plugins</groupId>
-                <artifactId>capnp-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <schemaDirectory>schema</schemaDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 

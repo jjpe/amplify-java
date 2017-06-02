@@ -14,7 +14,7 @@ public class Demo {
         final Thread sourceThread = new Thread(() -> { // Source
             try {
                 final CClient source = new UClient().connect();
-                final Msg msg0 = new Msg()
+                final Msg msg = new Msg()
                         .setOrigin("code (msg0)")
                         .setProcess("Java Test Source")
                         .setRequestNumber(20000)
@@ -33,21 +33,12 @@ public class Demo {
                                                 new Ast("FnCall").setData("double").addChildren(
                                                         new Ast("Integer").setData("10"))))
                         );
-                final Msg msg1 = new Msg()
-                        .setOrigin("code (msg1)")
-                        .setProcess("Java Test Source")
-                        .setRequestNumber(20001)
-                        .setKind("test msg")
-                        .setLanguage(new Language("JibberJabber"))
-                        .setContents(Contents.newEntries("Ėñtrÿ 0", "Ėñtrÿ 1"));
                 while (true) {
                     Thread.sleep(10000);  // Delay sending to allow the network to settle
-                    source.send(msg0.setRequestNumber(msg0.getRequestNumber() + 1));
-                    System.out.println(String.format("[source] Sent msg0[%s]", msg0.getRequestNumber()));
+                    source.send(msg.setRequestNumber(msg.getRequestNumber() + 1));
+                    System.out.println(String.format("[source] Sent msg0[%s]", msg.getRequestNumber()));
 
                 }
-//                source.send(msg1);
-//                System.out.println("[source] Sent msg1");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
