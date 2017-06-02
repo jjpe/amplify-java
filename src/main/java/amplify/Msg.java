@@ -1,4 +1,4 @@
-package cereal;
+package amplify;
 
 import com.sun.jna.Pointer;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * Proxy convenience class to manipulate libamplify messages.
  */
 public class Msg implements Closeable {
-    private static final LibCereal LIB = LibCereal.INSTANCE;
+    private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
     final Pointer ptr;
 
@@ -105,4 +105,34 @@ public class Msg implements Closeable {
     @Override
     public void close() throws IOException {  this.destroy();   }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Msg {").append("\n");
+        sb.append("    process = \"").append(this.getProcess()).append("\",\n");
+        sb.append("    request number = ").append(this.getRequestNumber()).append(",\n");
+        sb.append("    kind = \"").append(this.getKind()).append("\",\n");
+        sb.append("    origin = ").append(this.getOrigin()).append(",\n");
+
+        final Contents contents = this.getContents();
+        if (contents == null) {
+            sb.append("    contents = null,\n");
+        } else {
+            sb.append("    contents = ").append(contents).append(",\n");
+        }
+        sb.append("    regions = ").append(this.getRegions()).append(",\n");
+        final Language language = this.getLanguage();
+        if (language == null) {
+            sb.append("    language = null,\n");
+        } else {
+            sb.append("    language = \"").append(language).append("\",\n");
+        }
+        final Ast ast = this.getAst();
+        if (ast == null) {
+            sb.append("    ast = null").append("\n");
+        } else {
+            sb.append("    ast =\n").append(ast.indentedString(2)).append("\n");
+        }
+        sb.append('}');
+        return sb.toString();
+    }
 }

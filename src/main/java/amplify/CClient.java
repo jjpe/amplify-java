@@ -1,4 +1,4 @@
-package cereal;
+package amplify;
 
 import com.sun.jna.Pointer;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
  * Proxy convenience class to manipulate connected libamplify clients.
  */
 public class CClient implements Closeable {
-    private static final LibCereal LIB = LibCereal.INSTANCE;
+    private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
     private final Pointer ptr;
 

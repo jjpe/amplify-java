@@ -1,4 +1,4 @@
-package cereal;
+package amplify;
 
 public class Hwm {
     public static final Hwm UNBOUNDED = new Hwm(0);

@@ -1,4 +1,4 @@
-package cereal;
+package amplify;
 
 import com.sun.jna.Pointer;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ast implements Closeable {
-    private static final LibCereal LIB = LibCereal.INSTANCE;
+    private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
     final Pointer ptr;
 
@@ -64,7 +64,7 @@ public class Ast implements Closeable {
         return sb;
     }
 
-    private String string(long indentLevel) {
+    String indentedString(long indentLevel) {
         if (this.ptr == null) {  return "" + null;  }
 
         final StringBuilder sb = new StringBuilder()
@@ -85,7 +85,7 @@ public class Ast implements Closeable {
 
         for (final Ast child : this.getChildren()) {
             sb      .append("\n")
-                    .append(child.string(indentLevel + 1))
+                    .append(child.indentedString(indentLevel + 1))
                     .append(",");
         }
 
@@ -99,6 +99,6 @@ public class Ast implements Closeable {
 
     @Override
     public String toString() {
-        return this.string(0);
+        return this.indentedString(0);
     }
 }

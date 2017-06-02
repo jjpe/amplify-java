@@ -1,12 +1,12 @@
-package cereal;
+package amplify;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
-public interface LibCereal extends Library {
-    String DYLIB_NAME = "libcereal_c_api";
-    LibCereal INSTANCE = Native.loadLibrary(DYLIB_NAME, LibCereal.class);
+public interface LibAmplify extends Library {
+    String DYLIB_NAME = "libamplify_c";
+    LibAmplify INSTANCE = Native.loadLibrary(DYLIB_NAME, LibAmplify.class);
 
     /************************** UReporter **************************/
     Pointer ureporter_new();

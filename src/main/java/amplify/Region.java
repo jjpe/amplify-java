@@ -1,4 +1,4 @@
-package cereal;
+package amplify;
 
 import com.sun.jna.Pointer;
 
@@ -6,7 +6,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 public class Region implements Closeable {
-    private static final LibCereal LIB = LibCereal.INSTANCE;
+    private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
     final Pointer ptr;
 

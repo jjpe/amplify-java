@@ -1,6 +1,5 @@
-package cereal;
+package amplify;
 
-import com.google.common.collect.Lists;
 import com.sun.jna.Pointer;
 
 import java.io.Closeable;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Contents implements Closeable {
-    private static final LibCereal LIB = LibCereal.INSTANCE;
+    private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
     final Pointer ptr;
 

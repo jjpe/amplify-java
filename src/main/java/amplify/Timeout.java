@@ -1,4 +1,4 @@
-package cereal;
+package amplify;
 
 public class Timeout {
     public static final Timeout BLOCK = new Timeout(-1);

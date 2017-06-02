@@ -1,15 +1,15 @@
-package cereal.report;
+package amplify.report;
 
-import cereal.Hwm;
-import cereal.LibCereal;
-import cereal.Timeout;
+import amplify.Hwm;
+import amplify.LibAmplify;
+import amplify.Timeout;
 import com.sun.jna.Pointer;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 public class UReporter implements Closeable {
-    private static final LibCereal LIB = LibCereal.INSTANCE;
+    private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
     private final Pointer ptr;
 
