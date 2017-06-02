@@ -5,7 +5,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install zeromq || brew upgrade zeromq; fi
 script:
 - mvn clean compile assembly:single --update-snapshots
-- mv ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}.jar
+#- mv ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}.jar
+- version=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)')
+- mv ${TRAVIS_BUILD_DIR}/target/amplify-java-${version}-jar-with-dependencies.jar ${TRAVIS_BUILD_DIR}/target/amplify-java-${version}.jar
 deploy:
   provider: releases
   skip_cleanup: true
