@@ -1,0 +1,17 @@
+os: osx
+osx_image: xcode6.4
+language: java
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install zeromq || brew upgrade zeromq; fi
+script:
+- mvn clean compile assembly:single --update-snapshots
+- mv ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}.jar
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: SHnOWY7ek77qVFNeNLEUe89J6h7QpwOpPmAB5ufaX31HaeZHs+V1pJnMVxSlnV+vH+ar+pe8u4iym7jryM06pgMpCZPk1OA/fDM5RwjReJ5vT5mrwF+IIqkBrHFds9xP6tpbcwWl76yPhlTO2nOU+idU80hzBTASP4QnkMLLRq49z0u4QgOsMM5CTfc1Pcaed2nfLvkLdofCid7kERj/h3ODmNjwF5YGJW10H8A6NF7+N/83+NQblJ9LkqT/kqh0enjH9lzXMkNG56E0jhfqhQEjlrOceWDhWcSVO7ovdndqR50NKbCsoginysvw2DtnlYoHWdfqLiLbAVy99nTW4Il9UosmCicZasTYu2oFd7XI2mugaIz9QPGrI0y2mZXfb9+8+crh90lQ/BN1b5euL2sJ0oFD16rD/3EBflEiDtmgZJdAIuEK5e4b9B+rN4pwu37Rx+LyktXjX69MqcfobcMiinRnWl8fnvcDBg0TUB2tST6iin/mTDlYoBiaaWK1bQzJ/6F9GmZeCN6cSoMPrtf4t+V43C9SpOISyJUjAyjGodqS6sge8MWlqFgkYaeD4olBtQKsKi9dihyKtFfj3NJvAFn/+aNFkmFouFvOnJEhhW+M1kmS3dZBRNylHpLZt6v/L1pNVm03kivoq/k2MAyLYG9PT9DlTG/fpGPE56M=
+  file: amplify-java-${TRAVIS_TAG}.jar
+  on:
+    repo: jjpe/amplify-java
+    tags: true
