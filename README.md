@@ -1,1 +1,3 @@
-# libcereal-java
+# Amplify-java
+
+Java bindings for Amplify
