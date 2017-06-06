@@ -5,7 +5,8 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
 public interface LibAmplify extends Library {
-    String DYLIB_NAME = "amplify_c";
+    String DYLIB_VERSION = "0.11.0";
+    String DYLIB_NAME = "amplify_c-" + DYLIB_VERSION + "-dbg";
     LibAmplify INSTANCE = Native.loadLibrary(DYLIB_NAME, LibAmplify.class);
 
     /************************** UReporter **************************/
