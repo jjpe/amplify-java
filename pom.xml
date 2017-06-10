@@ -26,7 +26,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>src/main/resources/darwin</directory>
                 <includes>
                     <include>*.so</include>
                     <include>*.dylib</include>
