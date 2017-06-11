@@ -1,3 +1,4 @@
 .idea/
+src/main/resources/amplify.properties
 target/
 *.iml

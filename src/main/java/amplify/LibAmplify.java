@@ -4,9 +4,12 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public interface LibAmplify extends Library {
-    String DYLIB_VERSION = "0.11.2";
-    String DYLIB_NAME = "amplify_c-" + DYLIB_VERSION + "-dbg";
+    String DYLIB_NAME = "amplify_c-" + AmplifyProperties.version() + "-dbg";
     LibAmplify INSTANCE = Native.loadLibrary(DYLIB_NAME, LibAmplify.class);
 
     /************************** UReporter **************************/
@@ -130,4 +133,26 @@ public interface LibAmplify extends Library {
     Pointer ast_get_child(final Pointer ast, final long index);
     void ast_clear_children(final Pointer ast);
     long ast_count_children(final Pointer ast);
+
+
+    class AmplifyProperties {
+        @SuppressWarnings("SameParameterValue")
+        private static String getAmplifyProperty(final String property) {
+            // Fish up the properties from either src/main/resources/amplify.properties
+            // for running from an IDE or target/classes/amplify.properties for jar files.
+            final InputStream is = ClassLoader.getSystemResourceAsStream("amplify.properties");
+            final Properties properties = new Properties();
+            try {
+                properties.load(is);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+            return properties.getProperty(property);
+        }
+
+        public static String version() {
+            return getAmplifyProperty("amplify-version");
+        }
+    }
 }
