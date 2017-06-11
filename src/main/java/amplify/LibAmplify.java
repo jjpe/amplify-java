@@ -11,7 +11,7 @@ public interface LibAmplify extends Library {
 
     /************************** UReporter **************************/
     Pointer ureporter_new();
-    void ureporter_destroy(Pointer ureporter);
+    void ureporter_destroy(final Pointer ureporter);
 
     void ureporter_serialize_using_capn_proto(final Pointer ureporter);
     void ureporter_serialize_using_json(final Pointer ureporter);
@@ -21,7 +21,7 @@ public interface LibAmplify extends Library {
     Pointer ureporter_connect(final Pointer ureporter);
 
     /************************** CReporter **************************/
-    void creporter_destroy(Pointer creporter);
+    void creporter_destroy(final Pointer creporter);
 
     void creporter_set_tx_timeout(final Pointer creporter, final int timeout);
     void creporter_set_tx_hwm(final Pointer creporter, final int hwm);
@@ -29,7 +29,7 @@ public interface LibAmplify extends Library {
 
     /************************** Report **************************/
     Pointer report_new();
-    void report_destroy(Pointer report);
+    void report_destroy(final Pointer report);
 
     void report_set_action(final Pointer report, final String action);
     String report_get_action(final Pointer report);
@@ -45,7 +45,7 @@ public interface LibAmplify extends Library {
 
     /************************** UClient **************************/
     Pointer uclient_new();
-    void uclient_destroy(Pointer uclient);
+    void uclient_destroy(final Pointer uclient);
 
     void uclient_serialize_using_capn_proto(final Pointer client);
     void uclient_serialize_using_json(final Pointer client);
@@ -58,7 +58,7 @@ public interface LibAmplify extends Library {
     Pointer uclient_connect(final Pointer client);
 
     /************************** CClient **************************/
-    void cclient_destroy(Pointer cclient);
+    void cclient_destroy(final Pointer cclient);
 
     void cclient_set_rx_timeout(final Pointer client, final int timeout);
     void cclient_set_tx_timeout(final Pointer client, final int timeout);
@@ -69,7 +69,7 @@ public interface LibAmplify extends Library {
 
     /************************** Msg **************************/
     Pointer msg_new();
-    void msg_destroy(Pointer msg);
+    void msg_destroy(final Pointer msg);
 
     void msg_set_process(final Pointer msg, final String source);
     String msg_get_process(final Pointer msg);
