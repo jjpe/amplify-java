@@ -6,6 +6,7 @@ import com.sun.jna.Pointer;
 import java.io.Closeable;
 import java.io.IOException;
 
+@Deprecated
 public class Report implements Closeable {
     private static final LibAmplify LIB = LibAmplify.INSTANCE;
 
