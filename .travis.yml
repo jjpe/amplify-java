@@ -1,6 +1,9 @@
 os: osx
 osx_image: xcode6.4
 language: java
+branches:
+  except:
+    - master
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install zeromq || brew upgrade zeromq; fi
 script:
