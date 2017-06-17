@@ -1,16 +1,23 @@
-os: osx
+os:
+- osx
+# - linux
 osx_image: xcode6.4
 language: java
 branches:
   except:
     - master
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install zeromq || brew upgrade zeromq; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install zeromq || brew upgrade zeromq; fi
+# - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libzmq3 libzmq3-dbg; fi
+- echo "TravisCI build dir @ $TRAVIS_BUILD_DIR"
+- echo "Git tag @ $TRAVIS_TAG"
 script:
+# - nativeVersion=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.nativeVersion|grep -Ev '(^\[|Download\w+:)')
+- mv  ${TRAVIS_BUILD_DIR}/target/amplify-java-${nativeVersion}-jar-with-dependencies.jar  ${TRAVIS_BUILD_DIR}/target/amplify-java-${nativeVersion}.jar
+- ls -ahl ${TRAVIS_BUILD_DIR}/
+- ls -ahl ${TRAVIS_BUILD_DIR}/target/
 - mvn clean compile assembly:single --update-snapshots
-#- mv ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}.jar
-- version=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)')
-- mv ${TRAVIS_BUILD_DIR}/target/amplify-java-${version}-jar-with-dependencies.jar ${TRAVIS_BUILD_DIR}/target/amplify-java-${version}.jar
+- mv  ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar  ${TRAVIS_BUILD_DIR}/target/amplify-java-${TRAVIS_TAG}.jar
 deploy:
   provider: releases
   skip_cleanup: true
