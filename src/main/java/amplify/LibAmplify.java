@@ -123,7 +123,7 @@ public interface LibAmplify extends Library {
          * @return
          */
         public static String nativeVersion() {
-            return getAmplifyProperty("amplify-native-nativeVersion");
+            return getAmplifyProperty("amplify-native-version");
         }
     }
 }
