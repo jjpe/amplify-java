@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public interface LibAmplify extends Library {
-    String DYLIB_NAME = "amplify_c-" + AmplifyProperties.version() + "-osx-dbg";
+    String DYLIB_NAME = "amplify_c-" + AmplifyProperties.nativeVersion() + "-osx-dbg";
     LibAmplify INSTANCE = Native.loadLibrary(DYLIB_NAME, LibAmplify.class);
 
     /************************** UReporter **************************/
@@ -151,8 +151,12 @@ public interface LibAmplify extends Library {
             return properties.getProperty(property);
         }
 
-        public static String version() {
-            return getAmplifyProperty("amplify-version");
+        /**
+         * The version of the native amplify dependency.
+         * @return
+         */
+        public static String nativeVersion() {
+            return getAmplifyProperty("amplify-native-nativeVersion");
         }
     }
 }
