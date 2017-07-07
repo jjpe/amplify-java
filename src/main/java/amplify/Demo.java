@@ -1,9 +1,17 @@
 package amplify;
 
+import com.sun.jna.Platform;
+
 public class Demo {
     static {
         // Ensure that the JAR generated from this code can find the dynamic lib
-        System.setProperty("jna.library.path", "./src/main/resources/darwin");
+        if (Platform.isMac()) {
+            System.setProperty("jna.library.path", "./src/main/resources/darwin");
+        } else if (Platform.isLinux() && Platform.is64Bit()) {
+            System.setProperty("jna.library.path", "./src/main/resources/linux-x86-64");
+        } else {
+            throw new IllegalStateException("Amplify does not support this OS at this time.");
+        }
     }
 
     private static void printMsg(final String tag, final Msg msg) {
@@ -19,7 +27,6 @@ public class Demo {
                         .setProcess("Java Test Source")
                         .setRequestNumber(20000)
                         .setKind("test msg")
-                        .setLanguage(null)
                         .setLanguage(new Language("FlibberClabberese"))
                         .setContents(Contents.newText("gah blah"))
                         .addRegions(new Region(0, 10), new Region(10, 20))

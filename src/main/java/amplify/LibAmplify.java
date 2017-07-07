@@ -1,15 +1,17 @@
 package amplify;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.net.URL;
+import java.util.List;
 
 public interface LibAmplify extends Library {
-    String DYLIB_NAME = "amplify_c-" + AmplifyProperties.nativeVersion() + "-osx-dbg";
+    String DYLIB_NAME = "amplify_c-" + AmplifyProperties.nativeVersion() + "-dbg";
     LibAmplify INSTANCE = Native.loadLibrary(DYLIB_NAME, LibAmplify.class);
 
 
@@ -107,15 +109,21 @@ public interface LibAmplify extends Library {
         private static String getAmplifyProperty(final String property) {
             // Fish up the properties from either src/main/resources/amplify.properties
             // for running from an IDE or target/classes/amplify.properties for jar files.
-            final InputStream is = ClassLoader.getSystemResourceAsStream("amplify.properties");
-            final Properties properties = new Properties();
+            final URL resource = Resources.getResource("amplify.properties");
             try {
-                properties.load(is);
+                List<String> lines = Resources.readLines(resource, Charsets.UTF_8);
+                final String prefix = property + "=";
+                for (final String line : lines) {
+                    if (line.startsWith(prefix)) {
+                        return line.substring(prefix.length());
+                    }
+                }
+                throw new IllegalStateException("lines:" + lines.toString());
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(-1);
             }
-            return properties.getProperty(property);
+            return null;
         }
 
         /**

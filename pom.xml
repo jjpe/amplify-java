@@ -22,6 +22,12 @@
             <artifactId>jna</artifactId>
             <version>4.4.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -31,10 +37,18 @@
                 <includes>
                     <include>*.so</include>
                     <include>*.dylib</include>
-                    <include>*.dll</include>
                 </includes>
                 <targetPath>darwin</targetPath>
             </resource>
+
+            <resource>
+                <directory>src/main/resources/linux-x86-64</directory>
+                <includes>
+                    <include>*.so</include>
+                </includes>
+                <targetPath>linux-x86-64</targetPath>
+            </resource>
+
             <resource>
                 <directory>src/main/resources/</directory>
                 <includes>
@@ -42,6 +56,7 @@
                 </includes>
                 <targetPath>./</targetPath>
             </resource>
+
         </resources>
 
         <plugins>
