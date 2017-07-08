@@ -127,7 +127,7 @@ public interface LibAmplify extends Library {
         }
 
         /**
-         * The version of the native amplify dependency.
+         * The version of the native amplify-c dependency.
          * @return
          */
         public static String nativeVersion() {
