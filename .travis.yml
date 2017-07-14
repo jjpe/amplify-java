@@ -14,7 +14,7 @@ script:
 - ls -ahl ${TRAVIS_BUILD_DIR}/target/
 - cd ${TRAVIS_BUILD_DIR}
 - mvn clean compile assembly:single --update-snapshots
-- cp  /target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar  /target/amplify-java-${TRAVIS_TAG}.jar
+- cp  target/amplify-java-${TRAVIS_TAG}-jar-with-dependencies.jar  target/amplify-java-${TRAVIS_TAG}.jar
 - ls -ahl ${TRAVIS_BUILD_DIR}/
 - ls -ahl ${TRAVIS_BUILD_DIR}/target/
 deploy:
