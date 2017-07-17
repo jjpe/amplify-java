@@ -6,7 +6,7 @@
 
     <groupId>amplify</groupId>
     <artifactId>amplify-java</artifactId>
-    <version>0.14.3</version>
+    <version>0.15.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
