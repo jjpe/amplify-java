@@ -6,14 +6,14 @@
 
     <groupId>amplify</groupId>
     <artifactId>amplify-java</artifactId>
-    <version>0.17.0</version>
+    <version>0.17.1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jna.library.path>src/main/resources</jna.library.path>
-        <amplify-c-version>0.17.0</amplify-c-version>
+        <amplify-c-version>0.17.1</amplify-c-version>
     </properties>
 
     <dependencies>
