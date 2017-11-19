@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>amplify</groupId>
+    <artifactId>amplify-java</artifactId>
+    <version>0.17.3</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jna.library.path>src/main/resources</jna.library.path>
+        <amplify-c-version>0.17.2</amplify-c-version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/darwin</directory>
+                <includes>
+                    <include>*.so</include>
+                    <include>*.dylib</include>
+                </includes>
+                <targetPath>darwin</targetPath>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources/linux-x86-64</directory>
+                <includes>
+                    <include>*.so</include>
+                </includes>
+                <targetPath>linux-x86-64</targetPath>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>amplify.properties</include>
+                </includes>
+                <targetPath>./</targetPath>
+            </resource>
+
+        </resources>
+
+        <plugins>
+            <plugin> <!-- Uberjar deployment -->
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>amplify.Demo</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.outputDirectory}/amplify.properties</outputFile>
+                            <outputFile>${project.basedir}/src/main/resources/amplify.properties</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.4.0</version>
+                    <configuration>
+                        <!-- To get rid of the warning: [WARNING] Warning: killAfter is now
+                             deprecated. Do you need it ? Please comment on MEXEC-6. see: method
+                             execute() in https://github.com/ispringer/exec-maven-plugin/blob/master/src/main/java/org/codehaus/mojo/exec/ExecJavaMojo.java -->
+                        <killAfter>-1</killAfter>
+                        <mainClass>amplify.Demo</mainClass>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
